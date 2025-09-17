@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAJEEBullah | Creative Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>'), auto;
+        }
+        
+        .mono {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 7rem);
+            line-height: 0.9;
+            letter-spacing: -0.05em;
+            font-weight: 700;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #000000;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .project-card {
+            transition: all 0.3s ease;
+            border: 1px solid #f1f1f1;
+        }
+        
+        .project-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+        
+        .footer-link {
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #000000;
+            transition: width 0.3s ease;
+        }
+        
+        .footer-link:hover::after {
+            width: 100%;
+        }
+        
+        #threejs-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Three.js Container -->
+    <div id="threejs-container"></div>
+    
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 py-6 px-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-xl mono font-medium tracking-wide">NAJEEB</div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#work" class="nav-link text-sm">Work</a>
+                <a href="#about" class="nav-link text-sm">About</a>
+                <a href="#contact" class="nav-link text-sm">Contact</a>
+            </div>
+            <button class="md:hidden">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center px-8 pt-20">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-8">
+                <span class="mono text-sm tracking-wider">DESIGNER & DEVELOPER</span>
+                <h1 class="hero-title font-bold my-4">Hello, I'm <span class="border-b-2 border-black">NAJEEB</span></h1>
+                <p class="text-xl text-gray-600 max-w-xl">
+                    Creating digital experiences that blend form and function with minimalist precision.
+                </p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4 mt-12">
+                <a href="#work" class="px-6 py-3 bg-black text-white rounded-sm font-medium text-sm mono hover:bg-gray-800 transition-all duration-300 hover-scale inline-flex items-center justify-center">
+                    View My Work
+                </a>
+                <a href="#contact" class="px-6 py-3 border border-black rounded-sm font-medium text-sm mono hover:bg-gray-100 transition-all duration-300 hover-scale inline-flex items-center justify-center">
+                    Get In Touch
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Work Section -->
+    <section id="work" class="py-20 px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4 md:mb-0">Selected Projects</h2>
+                <div class="mono text-sm tracking-wider">RECENT WORK</div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <a href="project1/index.html" class="project-card group">
+                    <div class="overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Project 1" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-xl font-bold mb-2">Meeting Tracker (Web App)</h3>
+                            <span class="mono text-xs text-gray-500">2023</span>
+                        </div>
+                        <p class="text-gray-600 text-sm">Detailed Meeting Tracker for the users to track their meetings and invoices.</p>
+                    </div>
+                </a>
+                
+                <!-- Project 2 -->
+                <a href="project2/index.html" class="project-card group">
+                    <div class="overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Project 2" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-xl font-bold mb-2">Mail Spam Detector</h3>
+                            <span class="mono text-xs text-gray-500">2023</span>
+                        </div>
+                        <p class="text-gray-600 text-sm">detects spam emails and marks them as spam.</p>
+                    </div>
+                </a>
+                
+                <!-- Project 3 -->
+                <a href="project3/index.html" class="project-card group">
+                    <div class="overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Project 3" class="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-105">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-xl font-bold mb-2">UI/UX Exploration</h3>
+                            <span class="mono text-xs text-gray-500">2022</span>
+                        </div>
+                        <p class="text-gray-600 text-sm">Mobile app interface design for productivity</p>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="px-8 py-3 border border-black rounded-sm font-medium text-sm mono hover:bg-gray-100 transition-all duration-300 inline-flex items-center hover-scale">
+                    View Full Portfolio <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Section -->
+    <section id="about" class="py-20 px-8 bg-gray-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col lg:flex-row items-start gap-16">
+                <div class="lg:w-1/3">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-8">About Me</h2>
+                    <div class="h-px w-20 bg-black mb-8"></div>
+                    <p class="text-gray-600 mb-6 text-lg">
+                        I'm a multidisciplinary designer and developer with a passion for creating clean, functional digital experiences.
+                    </p>
+                    <p class="text-gray-600 mb-8 text-lg">
+                        My approach combines aesthetic sensibility with technical precision, resulting in work that's both beautiful and purposeful.
+                    </p>
+                    <a href="#" class="px-6 py-3 border border-black rounded-sm font-medium text-sm mono hover:bg-black hover:text-white transition-all duration-300 inline-flex items-center hover-scale">
+                        Download CV <i class="fas fa-download ml-2 text-xs"></i>
+                    </a>
+                </div>
+                <div class="lg:w-2/3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Skill 1 -->
+                        <div class="p-6 border border-gray-200 bg-white hover:shadow-sm transition-all duration-300">
+                            <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                                <i class="fas fa-pencil-ruler"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Visual Design</h3>
+                            <p class="text-gray-600 text-sm">
+                                Crafting compelling visual identities and interfaces with typography, color, and layout.
+                            </p>
+                        </div>
+                        
+                        <!-- Skill 2 -->
+                        <div class="p-6 border border-gray-200 bg-white hover:shadow-sm transition-all duration-300">
+                            <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">Web Development</h3>
+                            <p class="text-gray-600 text-sm">
+                                Building responsive, performant websites with modern technologies.
+                            </p>
+                        </div>
+                        
+                        <!-- Skill 3 -->
+                        <div class="p-6 border border-gray-200 bg-white hover:shadow-sm transition-all duration-300">
+                            <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">UI/UX Design</h3>
+                            <p class="text-gray-600 text-sm">
+                                Creating intuitive digital experiences focused on user needs.
+                            </p>
+                        </div>
+                        
+                        <!-- Skill 4 -->
+                        <div class="p-6 border border-gray-200 bg-white hover:shadow-sm transition-all duration-300">
+                            <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                                <i class="fas fa-cube"></i>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">3D Design</h3>
+                            <p class="text-gray-600 text-sm">
+                                Developing immersive 3D visuals and animations for digital products.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Let's Create Together</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Interested in working together? I'd love to hear about your project.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <form class="space-y-6">
+                        <div>
+                            <label for="name" class="mono text-sm block mb-2">YOUR NAME</label>
+                            <input type="text" id="name" class="w-full px-4 py-3 border border-gray-300 rounded-sm focus:outline-none focus:border-black transition">
+                        </div>
+                        <div>
+                            <label for="email" class="mono text-sm block mb-2">EMAIL ADDRESS</label>
+                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-sm focus:outline-none focus:border-black transition">
+                        </div>
+                        <div>
+                            <label for="message" class="mono text-sm block mb-2">YOUR MESSAGE</label>
+                            <textarea id="message" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-sm focus:outline-none focus:border-black transition"></textarea>
+                        </div>
+                        <button type="submit" class="px-8 py-4 bg-black text-white rounded-sm font-medium text-sm mono hover:bg-gray-800 transition-all duration-300 w-full hover-scale">
+                            SEND MESSAGE
+                        </button>
+                    </form>
+                </div>
+                <div class="flex flex-col justify-between">
+                    <div>
+                        <h3 class="mono text-sm mb-6">CONTACT INFO</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <div class="mono text-xs text-gray-500 mb-1">EMAIL</div>
+                                <div class="text-lg">najeebullahn858@gmail.com</div>
+                            </div>
+                            <div>
+                                <div class="mono text-xs text-gray-500 mb-1">PHONE</div>
+                                <div class="text-lg">+91 7200114139</div>
+                            </div>
+                            <div>
+                                <div class="mono text-xs text-gray-500 mb-1">BASED IN</div>
+                                <div class="text-lg">Chennai, India</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <h3 class="mono text-sm mb-6">SOCIAL</h3>
+                        <div class="flex space-x-4">
+                            <a href="https://github.com/" class="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition-all duration-300" aria-label="GitHub">
+                                <i class="fab fa-github text-sm"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/" class="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition-all duration-300" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in text-sm"></i>
+                            </a>
+                            <a href="https://wa.me/917200114139" class="w-10 h-10 border border-gray-300 rounded-full flex items-center justify-center hover:bg-black hover:text-white hover:border-black transition-all duration-300" aria-label="WhatsApp">
+                                <i class="fab fa-whatsapp text-sm"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="py-12 px-8 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-xl mono font-medium tracking-wide mb-6 md:mb-0">NAJEEB</div>
+                <div class="mono text-sm tracking-wider mb-6 md:mb-0">
+                    © 2025 | All Rights Reserved
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="footer-link mono text-sm">Work</a>
+                    <a href="#" class="footer-link mono text-sm">About</a>
+                    <a href="#" class="footer-link mono text-sm">Contact</a>
+                    <a href="#" class="footer-link mono text-sm">Github</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Three.js 3D Model Interaction
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up Three.js scene
+            const container = document.getElementById('threejs-container');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ 
+                alpha: true,
+                antialias: true 
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+            
+            // Create multiple transparent 3D objects
+            const objects = [];
+            const geometries = [
+                new THREE.IcosahedronGeometry(1, 0),
+                new THREE.TorusGeometry(0.8, 0.3, 16, 32),
+                new THREE.OctahedronGeometry(1, 0),
+                new THREE.DodecahedronGeometry(1, 0)
+            ];
+            
+            const positions = [
+                { x: -4, y: 2, z: -5 },
+                { x: 3, y: -1, z: -7 },
+                { x: 2, y: 3, z: -10 },
+                { x: -3, y: -2, z: -8 }
+            ];
+            
+            const colors = [
+                0x000000,  // Pure black
+                0x333333,  // Dark gray
+                0x666666,  // Medium gray
+                0x999999   // Light gray
+            ];
+            
+            geometries.forEach((geometry, index) => {
+                const material = new THREE.MeshPhongMaterial({
+                    color: colors[index],
+                    transparent: true,
+                    opacity: 0.1,
+                    wireframe: true,
+                    shininess: 100,
+                    specular: 0x111111
+                });
+                
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(positions[index].x, positions[index].y, positions[index].z);
+                
+                // Add random initial rotation
+                mesh.rotation.set(
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI,
+                    Math.random() * Math.PI
+                );
+                
+                // Add random float direction
+                mesh.userData = {
+                    floatX: (Math.random() - 0.5) * 0.005,
+                    floatY: (Math.random() - 0.5) * 0.005,
+                    floatZ: (Math.random() - 0.5) * 0.005,
+                    originalPosition: { x: positions[index].x, y: positions[index].y, z: positions[index].z }
+                };
+                
+                scene.add(mesh);
+                objects.push(mesh);
+            });
+            
+            // Add subtle ambient light
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            
+            // Add directional light
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            // Position camera
+            camera.position.z = 5;
+            
+            // Mouse position
+            const mouse = {
+                x: 0,
+                y: 0
+            };
+            
+            // Handle mouse move
+            document.addEventListener('mousemove', (event) => {
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Update all objects
+                objects.forEach((object, index) => {
+                    // Make objects move away from cursor
+                    const distanceThreshold = 2;
+                    const distanceX = mouse.x * 4 - (object.position.x / 2);
+                    const distanceY = mouse.y * 3 - (object.position.y / 2);
+                    const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+                    
+                    if (distance < distanceThreshold) {
+                        // Move away from cursor with stronger force for closer distances
+                        const force = (distanceThreshold - distance) * 0.15;
+                        object.position.x -= distanceX / distance * force;
+                        object.position.y -= distanceY / distance * force;
+                    } else {
+                        // Return to original position with some floating movement
+                        const returnSpeed = 0.02;
+                        object.position.x += (object.userData.originalPosition.x - object.position.x) * returnSpeed;
+                        object.position.y += (object.userData.originalPosition.y - object.position.y) * returnSpeed;
+                        
+                        // Add gentle floating movement
+                        object.position.x += Math.sin(Date.now() * 0.001 + index) * 0.01;
+                        object.position.y += Math.cos(Date.now() * 0.001 + index) * 0.01;
+                    }
+                    
+                    // Apply the floating rotation
+                    object.rotation.x += object.userData.floatX;
+                    object.rotation.y += object.userData.floatY;
+                    object.rotation.z += object.userData.floatZ;
+                });
+                
+                renderer.render(scene, camera);
+            }
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+            
+            animate();
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+
+</html>
