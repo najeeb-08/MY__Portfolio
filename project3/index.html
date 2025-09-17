@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI/UX Exploration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <a href="../MY PORTFOLIO.html" class="fixed top-4 left-4 inline-flex items-center gap-2 px-4 py-2 border border-white text-white rounded-md bg-black bg-opacity-20 hover:bg-white hover:text-black transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 1.293a1 1 0 00-1.414 0l-8 8A1 1 0 002 11h1v6a1 1 0 001 1h4a1 1 0 001-1v-3h2v3a1 1 0 001 1h4a1 1 0 001-1v-6h1a1 1 0 00.707-1.707l-8-8z"/></svg>
+        Home
+    </a>
+    
+    <div class="container mx-auto px-4 py-16">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-12">
+                <i class="fas fa-mobile-alt text-6xl text-white mb-4"></i>
+                <h1 class="text-4xl font-bold text-white mb-4">UI/UX Exploration</h1>
+                <p class="text-xl text-white text-opacity-90">Mobile app interface design for productivity</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-palette text-pink-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Design System</h3>
+                    <p class="text-gray-600">Comprehensive design language with consistent colors, typography, and components.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-user-friends text-blue-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">User Research</h3>
+                    <p class="text-gray-600">In-depth user interviews and usability testing to inform design decisions.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-mobile-alt text-green-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Mobile First</h3>
+                    <p class="text-gray-600">Responsive design approach prioritizing mobile user experience.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-lightbulb text-purple-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Innovation</h3>
+                    <p class="text-gray-600">Creative solutions for complex user workflows and interactions.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-orange-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Analytics</h3>
+                    <p class="text-gray-600">Data-driven design decisions based on user behavior metrics.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                        <i class="fas fa-rocket text-red-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Prototyping</h3>
+                    <p class="text-gray-600">Interactive prototypes to validate concepts before development.</p>
+                </div>
+            </div>
+            
+            <div class="mt-12 bg-white rounded-2xl p-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Design Process</h2>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-pink-600 font-bold text-xl">1</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Research</h3>
+                        <p class="text-sm text-gray-600">User interviews and market analysis</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-blue-600 font-bold text-xl">2</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Ideate</h3>
+                        <p class="text-sm text-gray-600">Brainstorming and concept development</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-green-600 font-bold text-xl">3</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Design</h3>
+                        <p class="text-sm text-gray-600">Wireframes and visual design</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-purple-600 font-bold text-xl">4</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Test</h3>
+                        <p class="text-sm text-gray-600">Usability testing and iteration</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

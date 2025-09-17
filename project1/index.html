@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Time & Refreshments Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        .custom-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        input:focus, select:focus {
+            outline: none;
+            ring: 2px;
+            ring-color: #fb923c;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans min-h-screen">
+    <a href="../MY PORTFOLIO.html" class="fixed top-4 left-4 inline-flex items-center gap-2 px-4 py-2 border border-gray-900 text-gray-900 rounded-md bg-white hover:bg-gray-900 hover:text-white transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10.707 1.293a1 1 0 00-1.414 0l-8 8A1 1 0 002 11h1v6a1 1 0 001 1h4a1 1 0 001-1v-3h2v3a1 1 0 001 1h4a1 1 0 001-1v-6h1a1 1 0 00.707-1.707l-8-8z"/></svg>
+        Home
+    </a>
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+        <!-- Header -->
+        <header class="bg-white rounded-xl custom-shadow p-6 mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4 md:mb-0">
+                    Meeting Time & Refreshments Tracker
+                </h1>
+                <div class="bg-primary-100 px-4 py-2 rounded-lg">
+                    <p class="text-primary-700 font-semibold text-lg">
+                        Monthly Total: <span id="monthlyTotal">0</span> hours
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Form Section -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl custom-shadow p-6 mb-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Add New Meeting</h2>
+                    
+                    <form id="meetingForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Company *</label>
+                            <select id="company" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400">
+                                <option value="" disabled selected>Select a company</option>
+                                <option value="C1">C1</option>
+                                <option value="C2">C2</option>
+                                <option value="ss rana & co">ss rana & co</option>
+                                <option value="Vmeet holidays">Vmeet holidays</option>
+                                <option value="C5">C5</option>
+                                <option value="aalam gold">aalam gold</option>
+                                <option value="Farmley">Farmley</option>
+                                <option value="Social minds">Social minds</option>
+                                <option value="Ecofy">Ecofy</option>
+                                <option value="D1">D1</option>
+                                <option value="D2">D2</option>
+                                <option value="D3">D3</option>
+                                <option value="D4">D4</option>
+                                <option value="D5">D5</option>
+                                <option value="D6">D6</option>
+                                <option value="D7">D7</option>
+                                <option value="D8">D8</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Date *</label>
+                            <input type="date" id="date" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Start Time *</label>
+                                <input type="time" id="startTime" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">End Time *</label>
+                                <input type="time" id="endTime" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400">
+                            </div>
+                        </div>
+                        
+                        <div id="durationDisplay" class="hidden bg-primary-50 p-3 rounded-lg">
+                            <p class="text-primary-700 font-medium">Duration: <span id="duration">0h 0m</span></p>
+                        </div>
+                        
+                        <div class="border-t border-gray-200 pt-4">
+                            <h3 class="text-lg font-medium text-gray-800 mb-3">Refreshments (Optional)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tea (₹15 each)</label>
+                                    <input type="number" id="teaCount" min="0" value="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Snacks (₹5 each)</label>
+                                    <input type="number" id="snackCount" min="0" value="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400">
+                                </div>
+                            </div>
+                            <div id="refreshmentCost" class="mt-3 bg-gray-50 p-3 rounded-lg hidden">
+                                <p class="text-gray-700">Refreshment Cost: ₹<span id="cost">0</span></p>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200">
+                            Add Entry
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Daily Summary -->
+                <div class="bg-white rounded-xl custom-shadow p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-800">Daily Summary</h2>
+                        <div class="text-sm text-gray-600">Date: <span id="summaryDate">-</span></div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-2 text-sm font-medium text-gray-700">Company</th>
+                                    <th class="text-left py-2 text-sm font-medium text-gray-700">Start Time</th>
+                                    <th class="text-left py-2 text-sm font-medium text-gray-700">End Time</th>
+                                    <th class="text-left py-2 text-sm font-medium text-gray-700">Duration</th>
+                                    <th class="text-left py-2 text-sm font-medium text-gray-700">Refreshments</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dailyTableBody">
+                                <tr>
+                                    <td colspan="5" class="py-8 text-center text-gray-500">No meetings recorded for this date</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="border-t border-gray-200 font-medium">
+                                    <td colspan="3" class="py-2 text-right text-gray-700">Daily Total:</td>
+                                    <td class="py-2 text-gray-700" id="dailyDurationTotal">0h 0m</td>
+                                    <td class="py-2 text-gray-700" id="dailyRefreshmentTotal">₹0</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar Section -->
+            <div class="lg:col-span-1">
+                <!-- Action Buttons -->
+                <div class="bg-white rounded-xl custom-shadow p-6 mb-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Actions</h2>
+                    <div class="space-y-3">
+                        <button id="viewMonthlyBtn" class="w-full bg-primary-100 hover:bg-primary-200 text-primary-700 font-medium py-2.5 px-4 rounded-lg transition duration-200">
+                            View Monthly Summary
+                        </button>
+                        <button id="exportBtn" class="w-full bg-primary-100 hover:bg-primary-200 text-primary-700 font-medium py-2.5 px-4 rounded-lg transition duration-200">
+                            Export CSV
+                        </button>
+                        <button id="invoiceBtn" class="w-full bg-primary-500 hover:bg-primary-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200">
+                            Generate Invoice
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Monthly Summary -->
+                <div class="bg-white rounded-xl custom-shadow p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Monthly Summary</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-2 text-sm font-medium text-gray-700">Company</th>
+                                    <th class="text-left py-2 text-sm font-medium text-gray-700">Total Hours</th>
+                                </tr>
+                            </thead>
+                            <tbody id="monthlyTableBody">
+                                <tr>
+                                    <td colspan="2" class="py-8 text-center text-gray-500">No data available</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="border-t border-gray-200 font-medium">
+                                    <td class="py-2 text-gray-700">Grand Total:</td>
+                                    <td class="py-2 text-gray-700" id="monthlyGrandTotal">0 hours</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Monthly Summary Modal -->
+    <div id="monthlyModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl max-w-4xl w-full max-h-[80vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-xl font-semibold text-gray-800">Monthly Summary</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="text-left py-2 text-sm font-medium text-gray-700">Date</th>
+                                <th class="text-left py-2 text-sm font-medium text-gray-700">Company</th>
+                                <th class="text-left py-2 text-sm font-medium text-gray-700">Duration</th>
+                                <th class="text-left py-2 text-sm font-medium text-gray-700">Refreshments</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fullMonthlyTableBody">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div id="invoiceModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-xl w-full max-w-2xl max-h-[85vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+                <h3 class="text-xl font-semibold text-gray-800">Generate Invoice</h3>
+                <button id="closeInvoiceModal" class="text-gray-400 hover:text-gray-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-5">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                        <select id="invoiceCompany" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400"></select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">For month</label>
+                        <input id="invoiceMonth" type="month" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-400 focus:border-primary-400">
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button id="buildInvoiceBtn" class="bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg">Create</button>
+                    <button id="downloadInvoiceBtn" class="hidden border border-gray-300 px-4 py-2 rounded-lg text-gray-800">Download PDF</button>
+                </div>
+                <div id="invoicePreview" class="border border-gray-200 rounded-lg p-4 overflow-auto bg-white max-h-80"></div>
+                <div class="text-sm text-gray-600">QR is embedded inside the PDF.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize data storage
+        let meetingsData = JSON.parse(localStorage.getItem('meetingsData')) || [];
+        
+        // DOM Elements
+        const meetingForm = document.getElementById('meetingForm');
+        const companySelect = document.getElementById('company');
+        const dateInput = document.getElementById('date');
+        const startTimeInput = document.getElementById('startTime');
+        const endTimeInput = document.getElementById('endTime');
+        const durationDisplay = document.getElementById('durationDisplay');
+        const durationSpan = document.getElementById('duration');
+        const teaCountInput = document.getElementById('teaCount');
+        const snackCountInput = document.getElementById('snackCount');
+        const refreshmentCostDiv = document.getElementById('refreshmentCost');
+        const costSpan = document.getElementById('cost');
+        const dailyTableBody = document.getElementById('dailyTableBody');
+        const summaryDateSpan = document.getElementById('summaryDate');
+        const dailyDurationTotal = document.getElementById('dailyDurationTotal');
+        const dailyRefreshmentTotal = document.getElementById('dailyRefreshmentTotal');
+        const monthlyTableBody = document.getElementById('monthlyTableBody');
+        const monthlyGrandTotal = document.getElementById('monthlyGrandTotal');
+        const monthlyTotalSpan = document.getElementById('monthlyTotal');
+        const viewMonthlyBtn = document.getElementById('viewMonthlyBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const monthlyModal = document.getElementById('monthlyModal');
+        const closeModal = document.getElementById('closeModal');
+        const fullMonthlyTableBody = document.getElementById('fullMonthlyTableBody');
+
+        // Invoice elements
+        const invoiceBtn = document.getElementById('invoiceBtn');
+        const invoiceModal = document.getElementById('invoiceModal');
+        const closeInvoiceModal = document.getElementById('closeInvoiceModal');
+        const invoiceCompany = document.getElementById('invoiceCompany');
+        const invoiceMonth = document.getElementById('invoiceMonth');
+        const buildInvoiceBtn = document.getElementById('buildInvoiceBtn');
+        const invoicePreview = document.getElementById('invoicePreview');
+        const downloadInvoiceBtn = document.getElementById('downloadInvoiceBtn');
+
+        // Set today's date as default
+        const today = new Date();
+        dateInput.value = formatDate(today);
+
+        // Event Listeners
+        meetingForm.addEventListener('submit', handleFormSubmit);
+        startTimeInput.addEventListener('change', calculateDuration);
+        endTimeInput.addEventListener('change', calculateDuration);
+        teaCountInput.addEventListener('input', calculateRefreshmentCost);
+        snackCountInput.addEventListener('input', calculateRefreshmentCost);
+        dateInput.addEventListener('change', updateDailySummary);
+        viewMonthlyBtn.addEventListener('click', showMonthlyModal);
+        closeModal.addEventListener('click', () => monthlyModal.classList.add('hidden'));
+        exportBtn.addEventListener('click', exportToCSV);
+
+        // Invoice events
+        invoiceBtn.addEventListener('click', () => {
+            // Populate companies
+            const uniqueCompanies = [...new Set(meetingsData.map(m => m.company))].filter(Boolean).sort();
+            invoiceCompany.innerHTML = '<option value="">Select a company</option>' + uniqueCompanies.map(c => `<option value="${c}">${c}</option>`).join('');
+            // Default month = current
+            const now = new Date();
+            invoiceMonth.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+            invoicePreview.innerHTML = '';
+            downloadInvoiceBtn.classList.add('hidden');
+            invoiceModal.classList.remove('hidden');
+        });
+        closeInvoiceModal.addEventListener('click', () => invoiceModal.classList.add('hidden'));
+
+        // Initialize the app
+        updateDailySummary();
+        updateMonthlySummary();
+        updateMonthlyTotal();
+
+        // Functions
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function calculateDuration() {
+            if (startTimeInput.value && endTimeInput.value) {
+                const startTime = new Date(`2000-01-01T${startTimeInput.value}`);
+                let endTime = new Date(`2000-01-01T${endTimeInput.value}`);
+                
+                // Handle overnight meetings (end time is next day)
+                if (endTime < startTime) {
+                    endTime.setDate(endTime.getDate() + 1);
+                }
+                
+                const durationMs = endTime - startTime;
+                const hours = Math.floor(durationMs / (1000 * 60 * 60));
+                const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+                
+                durationSpan.textContent = `${hours}h ${minutes}m`;
+                durationDisplay.classList.remove('hidden');
+            }
+        }
+
+        function calculateRefreshmentCost() {
+            const teaCount = parseInt(teaCountInput.value) || 0;
+            const snackCount = parseInt(snackCountInput.value) || 0;
+            const totalCost = teaCount * 15 + snackCount * 5;
+            
+            costSpan.textContent = totalCost;
+            
+            if (totalCost > 0) {
+                refreshmentCostDiv.classList.remove('hidden');
+            } else {
+                refreshmentCostDiv.classList.add('hidden');
+            }
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            if (!companySelect.value) {
+                alert('Please select a company');
+                return;
+            }
+            
+            if (!startTimeInput.value || !endTimeInput.value) {
+                alert('Please enter both start and end times');
+                return;
+            }
+            
+            // Calculate duration
+            const startTime = new Date(`2000-01-01T${startTimeInput.value}`);
+            let endTime = new Date(`2000-01-01T${endTimeInput.value}`);
+            
+            // Handle overnight meetings (end time is next day)
+            let nextDay = false;
+            if (endTime < startTime) {
+                endTime.setDate(endTime.getDate() + 1);
+                nextDay = true;
+            }
+            
+            const durationMs = endTime - startTime;
+            const hours = Math.floor(durationMs / (1000 * 60 * 60));
+            const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+            const duration = { hours, minutes };
+            
+            // Calculate refreshment cost
+            const teaCount = parseInt(teaCountInput.value) || 0;
+            const snackCount = parseInt(snackCountInput.value) || 0;
+            const refreshmentCost = teaCount * 15 + snackCount * 5;
+            
+            // Create meeting object
+            const meeting = {
+                id: Date.now(),
+                date: dateInput.value,
+                company: companySelect.value,
+                startTime: startTimeInput.value,
+                endTime: endTimeInput.value,
+                duration,
+                teaCount,
+                snackCount,
+                refreshmentCost,
+                nextDay
+            };
+            
+            // Add to data and update storage
+            meetingsData.push(meeting);
+            localStorage.setItem('meetingsData', JSON.stringify(meetingsData));
+            
+            // Reset form
+            meetingForm.reset();
+            durationDisplay.classList.add('hidden');
+            refreshmentCostDiv.classList.add('hidden');
+            
+            // Update summaries
+            updateDailySummary();
+            updateMonthlySummary();
+            updateMonthlyTotal();
+            
+            alert('Meeting added successfully!');
+        }
+
+        function updateDailySummary() {
+            const selectedDate = dateInput.value;
+            summaryDateSpan.textContent = selectedDate;
+            
+            const dailyMeetings = meetingsData.filter(meeting => meeting.date === selectedDate);
+            
+            if (dailyMeetings.length === 0) {
+                dailyTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-8 text-center text-gray-500">No meetings recorded for this date</td>
+                    </tr>
+                `;
+                dailyDurationTotal.textContent = '0h 0m';
+                dailyRefreshmentTotal.textContent = '₹0';
+                return;
+            }
+            
+            let totalDurationMinutes = 0;
+            let totalRefreshmentCost = 0;
+            
+            dailyTableBody.innerHTML = dailyMeetings.map(meeting => {
+                totalDurationMinutes += meeting.duration.hours * 60 + meeting.duration.minutes;
+                totalRefreshmentCost += meeting.refreshmentCost;
+                
+                return `
+                    <tr class="border-b border-gray-100">
+                        <td class="py-3 text-sm">${meeting.company}</td>
+                        <td class="py-3 text-sm">${meeting.startTime}</td>
+                        <td class="py-3 text-sm">${meeting.nextDay ? '(Next day) ' : ''}${meeting.endTime}</td>
+                        <td class="py-3 text-sm">${meeting.duration.hours}h ${meeting.duration.minutes}m</td>
+                        <td class="py-3 text-sm">₹${meeting.refreshmentCost}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            const totalHours = Math.floor(totalDurationMinutes / 60);
+            const totalMinutes = totalDurationMinutes % 60;
+            dailyDurationTotal.textContent = `${totalHours}h ${totalMinutes}m`;
+            dailyRefreshmentTotal.textContent = `₹${totalRefreshmentCost}`;
+        }
+
+        function updateMonthlySummary() {
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            
+            // Filter meetings for current month
+            const monthlyMeetings = meetingsData.filter(meeting => {
+                const meetingDate = new Date(meeting.date);
+                return meetingDate.getMonth() === currentMonth && meetingDate.getFullYear() === currentYear;
+            });
+            
+            if (monthlyMeetings.length === 0) {
+                monthlyTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="2" class="py-8 text-center text-gray-500">No data available</td>
+                    </tr>
+                `;
+                monthlyGrandTotal.textContent = '0 hours';
+                return;
+            }
+            
+            // Calculate total hours per company
+            const companyTotals = {};
+            let grandTotalMinutes = 0;
+            
+            monthlyMeetings.forEach(meeting => {
+                const minutes = meeting.duration.hours * 60 + meeting.duration.minutes;
+                grandTotalMinutes += minutes;
+                
+                if (!companyTotals[meeting.company]) {
+                    companyTotals[meeting.company] = 0;
+                }
+                companyTotals[meeting.company] += minutes;
+            });
+            
+            // Convert to hours and format for display
+            monthlyTableBody.innerHTML = Object.keys(companyTotals).map(company => {
+                const totalMinutes = companyTotals[company];
+                const hours = Math.floor(totalMinutes / 60);
+                const minutes = totalMinutes % 60;
+                const displayText = minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`;
+                
+                return `
+                    <tr class="border-b border-gray-100">
+                        <td class="py-2 text-sm">${company}</td>
+                        <td class="py-2 text-sm">${displayText}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            const grandTotalHours = Math.floor(grandTotalMinutes / 60);
+            const grandTotalMinutesRemainder = grandTotalMinutes % 60;
+            monthlyGrandTotal.textContent = grandTotalMinutesRemainder > 0 
+                ? `${grandTotalHours}h ${grandTotalMinutesRemainder}m` 
+                : `${grandTotalHours}h`;
+        }
+
+        function updateMonthlyTotal() {
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const currentYear = currentDate.getFullYear();
+            
+            // Filter meetings for current month
+            const monthlyMeetings = meetingsData.filter(meeting => {
+                const meetingDate = new Date(meeting.date);
+                return meetingDate.getMonth() === currentMonth && meetingDate.getFullYear() === currentYear;
+            });
+            
+            // Calculate total hours
+            let totalMinutes = 0;
+            monthlyMeetings.forEach(meeting => {
+                totalMinutes += meeting.duration.hours * 60 + meeting.duration.minutes;
+            });
+            
+            const totalHours = (totalMinutes / 60).toFixed(1);
+            monthlyTotalSpan.textContent = totalHours;
+        }
+
+        function showMonthlyModal() {
+            fullMonthlyTableBody.innerHTML = '';
+            
+            if (meetingsData.length === 0) {
+                fullMonthlyTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="py-8 text-center text-gray-500">No meetings recorded</td>
+                    </tr>
+                `;
+            } else {
+                // Sort by date (newest first)
+                const sortedMeetings = [...meetingsData].sort((a, b) => 
+                    new Date(b.date) - new Date(a.date)
+                );
+                
+                sortedMeetings.forEach(meeting => {
+                    const row = document.createElement('tr');
+                    row.className = 'border-b border-gray-100';
+                    row.innerHTML = `
+                        <td class="py-3 text-sm">${meeting.date}</td>
+                        <td class="py-3 text-sm">${meeting.company}</td>
+                        <td class="py-3 text-sm">${meeting.duration.hours}h ${meeting.duration.minutes}m</td>
+                        <td class="py-3 text-sm">₹${meeting.refreshmentCost}</td>
+                    `;
+                    fullMonthlyTableBody.appendChild(row);
+                });
+            }
+            
+            monthlyModal.classList.remove('hidden');
+        }
+
+        function exportToCSV() {
+            if (meetingsData.length === 0) {
+                alert('No data to export');
+                return;
+            }
+            
+            // Create CSV content
+            let csvContent = "Date,Company,Start Time,End Time,Duration (hours),Duration (minutes),Tea Count,Snack Count,Refreshment Cost\n";
+            
+            meetingsData.forEach(meeting => {
+                const row = [
+                    meeting.date,
+                    `"${meeting.company}"`, // Wrap in quotes to handle commas in company names
+                    meeting.startTime,
+                    meeting.endTime,
+                    meeting.duration.hours,
+                    meeting.duration.minutes,
+                    meeting.teaCount,
+                    meeting.snackCount,
+                    meeting.refreshmentCost
+                ];
+                
+                csvContent += row.join(',') + '\n';
+            });
+            
+            // Create download link
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.setAttribute('href', url);
+            link.setAttribute('download', `meetings_export_${formatDate(new Date())}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function buildInvoiceHTML(company, year, month, rows, totals, qrDataURL) {
+            const title = `Invoice - ${company} - ${year}-${String(month).padStart(2,'0')}`;
+            const rowsHtml = rows.map((r, idx) => `
+                <tr>
+                    <td style="padding:4px; border:1px solid #e5e7eb;">${idx+1}</td>
+                    <td style="padding:4px; border:1px solid #e5e7eb;">${r.date}</td>
+                    <td style="padding:4px; border:1px solid #e5e7eb;">${r.startTime} - ${r.nextDay ? '(Next day) ' : ''}${r.endTime}</td>
+                    <td style="padding:4px; border:1px solid #e5e7eb;">${r.duration.hours}h ${r.duration.minutes}m</td>
+                    <td style="padding:4px; border:1px solid #e5e7eb;">₹${r.refreshmentCost}</td>
+                </tr>
+            `).join('');
+            return `
+                <div id="invoiceDoc" style="font-family: Inter, Arial, sans-serif; color:#111827;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <img src="./logo.png" alt="Atrium Coworks" style="width:34px; height:34px; object-fit:contain; border-radius:6px;" onerror="this.style.display='none'"/>
+                            <div>
+                                <div style="font-size:22px; font-weight:800;">Atrium Coworks</div>
+                                <div style="font-size:12px; color:#6b7280;">Invoice</div>
+                            </div>
+                        </div>
+                        <img src="${qrDataURL}" alt="QR" style="width:110px; height:110px;"/>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <h2 style="font-size:16px; font-weight:700;">${title}</h2>
+                        <div style="font-size:11px; color:#6b7280;">Generated ${new Date().toLocaleString()}</div>
+                    </div>
+                    <table style="width:100%; border-collapse:collapse; font-size:12px;">
+                        <thead>
+                            <tr style="background:#f9fafb;">
+                                <th style="padding:4px; border:1px solid #e5e7eb; text-align:left;">#</th>
+                                <th style="padding:4px; border:1px solid #e5e7eb; text-align:left;">Date</th>
+                                <th style="padding:4px; border:1px solid #e5e7eb; text-align:left;">Time</th>
+                                <th style="padding:4px; border:1px solid #e5e7eb; text-align:left;">Duration</th>
+                                <th style="padding:4px; border:1px solid #e5e7eb; text-align:left;">Refreshments</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" style="padding:6px; border:1px solid #e5e7eb; text-align:right; font-weight:600;">Totals</td>
+                                <td style="padding:6px; border:1px solid #e5e7eb; font-weight:600;">${totals.hours}h ${totals.minutes}m</td>
+                                <td style="padding:6px; border:1px solid #e5e7eb; font-weight:600;">₹${totals.cost}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+        }
+
+        // removed old HTML download helper (we now export PDF directly)
+
+        buildInvoiceBtn.addEventListener('click', () => {
+            const company = invoiceCompany.value;
+            if (!company) { alert('Select a company'); return; }
+            if (!invoiceMonth.value) { alert('Select a month'); return; }
+            const [yearStr, monthStr] = invoiceMonth.value.split('-');
+            const year = parseInt(yearStr, 10);
+            const month = parseInt(monthStr, 10);
+
+            // Filter rows for company and month
+            const rows = meetingsData.filter(m => {
+                if (m.company !== company) return false;
+                const d = new Date(m.date);
+                return d.getFullYear() === year && (d.getMonth()+1) === month;
+            });
+
+            if (rows.length === 0) {
+                invoicePreview.innerHTML = '<div class="text-gray-600">No data for selected company and month.</div>';
+                downloadInvoiceLink.classList.add('hidden');
+                invoiceQR.innerHTML = '';
+                return;
+            }
+
+            // Totals
+            let totalMinutes = 0;
+            let totalCost = 0;
+            rows.forEach(r => {
+                totalMinutes += r.duration.hours * 60 + r.duration.minutes;
+                totalCost += r.refreshmentCost || 0;
+            });
+            const totals = { hours: Math.floor(totalMinutes/60), minutes: totalMinutes%60, cost: totalCost };
+
+            // Generate QR image data URL to embed into the PDF
+            const qrTemp = document.createElement('div');
+            const qrText = `Atrium Coworks | ${company} | ${year}-${String(month).padStart(2,'0')}`;
+            new QRCode(qrTemp, { text: qrText, width: 110, height: 110 });
+            const qrCanvas = qrTemp.querySelector('canvas') || qrTemp.querySelector('img');
+            const qrDataURL = qrCanvas.toDataURL ? qrCanvas.toDataURL('image/png') : qrCanvas.src;
+
+            const html = buildInvoiceHTML(company, year, month, rows, totals, qrDataURL);
+            invoicePreview.innerHTML = html;
+            downloadInvoiceBtn.classList.remove('hidden');
+
+            downloadInvoiceBtn.onclick = () => {
+                const element = document.getElementById('invoiceDoc');
+                const fileName = `Atrium-Coworks_Invoice_${company}_${year}-${String(month).padStart(2,'0')}.pdf`;
+                const opt = {
+                    margin: [10, 10, 10, 10],
+                    filename: fileName,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+            };
+        });
+    </script>
+</body>
+</html>
