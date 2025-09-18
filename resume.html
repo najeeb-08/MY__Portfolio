@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N. Najeebullah - Resume</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>'), auto;
+        }
+        
+        .mono {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        
+        #threejs-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .hover-scale {
+            transition: transform 0.3s ease;
+        }
+        
+        .hover-scale:hover {
+            transform: scale(1.05);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body>
+    <!-- Three.js Container -->
+    <div id="threejs-container"></div>
+    
+    <!-- React App Container -->
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const ResumeApp = () => {
+            const [isLoaded, setIsLoaded] = useState(false);
+
+            useEffect(() => {
+                // Initialize Three.js
+                initThreeJS();
+                setIsLoaded(true);
+            }, []);
+
+            const initThreeJS = () => {
+                const container = document.getElementById('threejs-container');
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ 
+                    alpha: true,
+                    antialias: true 
+                });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                container.appendChild(renderer.domElement);
+                
+                // Create floating geometric objects
+                const objects = [];
+                const geometries = [
+                    new THREE.IcosahedronGeometry(0.8, 0),
+                    new THREE.TorusGeometry(0.6, 0.2, 16, 32),
+                    new THREE.OctahedronGeometry(0.8, 0),
+                    new THREE.DodecahedronGeometry(0.8, 0),
+                    new THREE.BoxGeometry(1, 1, 1),
+                    new THREE.ConeGeometry(0.8, 1.2, 8)
+                ];
+                
+                const positions = [
+                    { x: -6, y: 3, z: -8 },
+                    { x: 5, y: -2, z: -10 },
+                    { x: 3, y: 4, z: -12 },
+                    { x: -4, y: -3, z: -9 },
+                    { x: 7, y: 1, z: -11 },
+                    { x: -7, y: 2, z: -7 }
+                ];
+                
+                const colors = [
+                    0x000000, 0x333333, 0x666666, 0x999999, 0xcccccc, 0xeeeeee
+                ];
+                
+                geometries.forEach((geometry, index) => {
+                    const material = new THREE.MeshPhongMaterial({
+                        color: colors[index],
+                        transparent: true,
+                        opacity: 0.08,
+                        wireframe: true,
+                        shininess: 100,
+                        specular: 0x111111
+                    });
+                    
+                    const mesh = new THREE.Mesh(geometry, material);
+                    mesh.position.set(positions[index].x, positions[index].y, positions[index].z);
+                    
+                    mesh.rotation.set(
+                        Math.random() * Math.PI,
+                        Math.random() * Math.PI,
+                        Math.random() * Math.PI
+                    );
+                    
+                    mesh.userData = {
+                        floatX: (Math.random() - 0.5) * 0.003,
+                        floatY: (Math.random() - 0.5) * 0.003,
+                        floatZ: (Math.random() - 0.5) * 0.003,
+                        originalPosition: { x: positions[index].x, y: positions[index].y, z: positions[index].z }
+                    };
+                    
+                    scene.add(mesh);
+                    objects.push(mesh);
+                });
+                
+                // Add lighting
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+                scene.add(ambientLight);
+                
+                const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+                directionalLight.position.set(1, 1, 1);
+                scene.add(directionalLight);
+                
+                camera.position.z = 5;
+                
+                // Mouse interaction
+                const mouse = { x: 0, y: 0 };
+                document.addEventListener('mousemove', (event) => {
+                    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                });
+                
+                // Animation loop
+                function animate() {
+                    requestAnimationFrame(animate);
+                    
+                    objects.forEach((object, index) => {
+                        const distanceThreshold = 2.5;
+                        const distanceX = mouse.x * 5 - (object.position.x / 2);
+                        const distanceY = mouse.y * 4 - (object.position.y / 2);
+                        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+                        
+                        if (distance < distanceThreshold) {
+                            const force = (distanceThreshold - distance) * 0.1;
+                            object.position.x -= distanceX / distance * force;
+                            object.position.y -= distanceY / distance * force;
+                        } else {
+                            const returnSpeed = 0.015;
+                            object.position.x += (object.userData.originalPosition.x - object.position.x) * returnSpeed;
+                            object.position.y += (object.userData.originalPosition.y - object.position.y) * returnSpeed;
+                            
+                            object.position.x += Math.sin(Date.now() * 0.0008 + index) * 0.008;
+                            object.position.y += Math.cos(Date.now() * 0.0008 + index) * 0.008;
+                        }
+                        
+                        object.rotation.x += object.userData.floatX;
+                        object.rotation.y += object.userData.floatY;
+                        object.rotation.z += object.userData.floatZ;
+                    });
+                    
+                    renderer.render(scene, camera);
+                }
+                
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+                
+                animate();
+            };
+
+            if (!isLoaded) {
+                return <div className="min-h-screen flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
+                </div>;
+            }
+
+            return (
+                <div className="min-h-screen bg-white">
+                    {/* Header */}
+                    <header className="fixed w-full z-50 py-6 px-8 bg-white/80 backdrop-blur-sm">
+                        <div className="max-w-7xl mx-auto flex justify-between items-center">
+                            <div className="text-xl mono font-medium tracking-wide">NAJEEB</div>
+                            <a href="/MY__Portfolio/" className="inline-flex items-center gap-2 px-4 py-2 border border-black text-black rounded-sm hover:bg-black hover:text-white transition-all duration-300 hover-scale">
+                                <i className="fas fa-arrow-left text-sm"></i>
+                                Back to Portfolio
+                            </a>
+                        </div>
+                    </header>
+
+                    {/* Main Content */}
+                    <main className="pt-24 pb-16 px-8">
+                        <div className="max-w-4xl mx-auto">
+                            {/* Hero Section */}
+                            <div className="text-center mb-16">
+                                <h1 className="text-5xl md:text-6xl font-bold mb-4 gradient-text">N. Najeebullah</h1>
+                                <p className="text-xl text-gray-600 mb-8">Creative Designer & Data Science Enthusiast</p>
+                                <div className="flex flex-wrap justify-center gap-4 text-sm mono">
+                                    <span className="px-3 py-1 bg-gray-100 rounded-full">Chennai, Tamil Nadu</span>
+                                    <span className="px-3 py-1 bg-gray-100 rounded-full">najeebullahn658@gmail.com</span>
+                                    <span className="px-3 py-1 bg-gray-100 rounded-full">+91 7200114139</span>
+                                </div>
+                            </div>
+
+                            {/* Profile Summary */}
+                            <section className="mb-12 card-hover bg-gray-50 p-8 rounded-2xl">
+                                <h2 className="text-2xl font-bold mb-6 mono tracking-wide">PROFILE SUMMARY</h2>
+                                <p className="text-gray-700 leading-relaxed">
+                                    Enthusiastic Student and creative Graphic Designer with expertise in machine learning, data analysis, and visual content creation. 
+                                    Proficient in designing social media posts and blog banners using tools like Canva and Kitti, aligning with brand identities. 
+                                    Skilled in identifying trends, automating data processes, and delivering actionable insights. 
+                                    Eager to apply a unique blend of analytical and creative skills to drive impactful business outcomes.
+                                </p>
+                            </section>
+
+                            {/* Work Experience */}
+                            <section className="mb-12">
+                                <h2 className="text-2xl font-bold mb-8 mono tracking-wide">WORK EXPERIENCE</h2>
+                                <div className="space-y-8">
+                                    <div className="card-hover p-6 border border-gray-200 rounded-xl">
+                                        <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
+                                            <div>
+                                                <h3 className="text-xl font-bold">Graphic Designer Intern (Freelance)</h3>
+                                                <p className="text-lg text-gray-600">Digitizen | Singapore (Remote)</p>
+                                            </div>
+                                            <span className="mono text-sm text-gray-500 mt-2 md:mt-0">Jan 2025 - Present</span>
+                                        </div>
+                                        <ul className="space-y-2 text-gray-700">
+                                            <li className="flex items-start gap-2">
+                                                <i className="fas fa-check text-green-500 mt-1 text-sm"></i>
+                                                <span>Created visually appealing social media posts and blog banners using Canva and Kitti</span>
+                                            </li>
+                                            <li className="flex items-start gap-2">
+                                                <i className="fas fa-check text-green-500 mt-1 text-sm"></i>
+                                                <span>Designed custom graphics aligned with brand guidelines</span>
+                                            </li>
+                                            <li className="flex items-start gap-2">
+                                                <i className="fas fa-check text-green-500 mt-1 text-sm"></i>
+                                                <span>Collaborated with clients to deliver creative designs within tight deadlines</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="card-hover p-6 border border-gray-200 rounded-xl">
+                                        <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
+                                            <div>
+                                                <h3 className="text-xl font-bold">LinkedIn Marketing Intern</h3>
+                                                <p className="text-lg text-gray-600">Atrium Coworks</p>
+                                            </div>
+                                            <span className="mono text-sm text-gray-500 mt-2 md:mt-0">March 2025 - Present</span>
+                                        </div>
+                                        <ul className="space-y-2 text-gray-700">
+                                            <li className="flex items-start gap-2">
+                                                <i className="fas fa-check text-green-500 mt-1 text-sm"></i>
+                                                <span>Led LinkedIn growth and engagement by posting regular content and engaging with audiences</span>
+                                            </li>
+                                            <li className="flex items-start gap-2">
+                                                <i className="fas fa-check text-green-500 mt-1 text-sm"></i>
+                                                <span>Created compelling visual and written content for marketing</span>
+                                            </li>
+                                            <li className="flex items-start gap-2">
+                                                <i className="fas fa-check text-green-500 mt-1 text-sm"></i>
+                                                <span>Managed online reputation and performance analytics</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div className="card-hover p-6 border border-gray-200 rounded-xl">
+                                        <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
+                                            <div>
+                                                <h3 className="text-xl font-bold">Data Science & ML Intern</h3>
+                                                <p className="text-lg text-gray-600">Globesci Technologies</p>
+                                            </div>
+                                            <span className="mono text-sm text-gray-500 mt-2 md:mt-0">August 2024 - September 2024</span>
+                                        </div>
+                                        <ul className="space-y-2 text-gray-700">
+                                            <li className="flex items-start gap-2">
+                                                <i className="fas fa-check text-green-500 mt-1 text-sm"></i>
+                                                <span>Analyzed large datasets to identify trends and patterns</span>
+                                            </li>
+                                            <li className="flex items-start gap-2">
+                                                <i className="fas fa-check text-green-500 mt-1 text-sm"></i>
+                                                <span>Developed machine learning models to predict outcomes and improve data-driven decision-making</span>
+                                            </li>
+                                            <li className="flex items-start gap-2">
+                                                <i className="fas fa-check text-green-500 mt-1 text-sm"></i>
+                                                <span>Automated data cleaning processes using Python scripts</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </section>
+
+                            {/* Skills & Projects Grid */}
+                            <div className="grid md:grid-cols-2 gap-8 mb-12">
+                                {/* Skills */}
+                                <section className="card-hover p-6 border border-gray-200 rounded-xl">
+                                    <h2 className="text-2xl font-bold mb-6 mono tracking-wide">SKILLS</h2>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <h3 className="font-semibold text-gray-800 mb-2">Technical Skills</h3>
+                                            <div className="flex flex-wrap gap-2">
+                                                {['Python', 'NumPy', 'Pandas', 'Tableau', 'Canva', 'Kitti', 'MS Office'].map(skill => (
+                                                    <span key={skill} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                                                        {skill}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold text-gray-800 mb-2">Soft Skills</h3>
+                                            <div className="flex flex-wrap gap-2">
+                                                {['Communication', 'Time Management', 'Teamwork', 'Adaptability', 'Marketing', 'Leadership'].map(skill => (
+                                                    <span key={skill} className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                                                        {skill}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                {/* Projects */}
+                                <section className="card-hover p-6 border border-gray-200 rounded-xl">
+                                    <h2 className="text-2xl font-bold mb-6 mono tracking-wide">PROJECTS</h2>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <h3 className="font-semibold text-gray-800 mb-2">Next-Gen AI-Powered Stroke Risk Prediction System</h3>
+                                            <p className="text-sm text-gray-600 mb-2">
+                                                Developed a full-stack web application using Flask and deep neural network model (TensorFlow/Keras) 
+                                                to predict stroke risk with 91% accuracy, integrating SHAP for explainable AI.
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold text-gray-800 mb-2">Rock and Mine Prediction</h3>
+                                            <p className="text-sm text-gray-600">
+                                                Developed a Python-based machine learning model using NumPy and Pandas with Logistic regression 
+                                                for prediction to detect whether it's mine or rock.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            {/* Education & Achievements */}
+                            <div className="grid md:grid-cols-2 gap-8 mb-12">
+                                {/* Education */}
+                                <section className="card-hover p-6 border border-gray-200 rounded-xl">
+                                    <h2 className="text-2xl font-bold mb-6 mono tracking-wide">EDUCATION</h2>
+                                    <div>
+                                        <h3 className="font-semibold text-gray-800 mb-1">Aalim Muhammed Salegh College Of Engineering</h3>
+                                        <p className="text-gray-600 mb-2">Chennai, Tamil Nadu</p>
+                                        <p className="text-sm text-gray-500">Bachelor's in Computer Science Engineering (2021-2025)</p>
+                                    </div>
+                                </section>
+
+                                {/* Achievements */}
+                                <section className="card-hover p-6 border border-gray-200 rounded-xl">
+                                    <h2 className="text-2xl font-bold mb-6 mono tracking-wide">ACHIEVEMENTS</h2>
+                                    <div className="space-y-3">
+                                        <div className="flex items-start gap-2">
+                                            <i className="fas fa-trophy text-yellow-500 mt-1"></i>
+                                            <div>
+                                                <p className="font-semibold text-gray-800">Karate Champion</p>
+                                                <p className="text-sm text-gray-600">Gold Medal - South Zone National Level Tournament</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-start gap-2">
+                                            <i className="fas fa-medal text-yellow-500 mt-1"></i>
+                                            <div>
+                                                <p className="font-semibold text-gray-800">Interschool Tournament</p>
+                                                <p className="text-sm text-gray-600">First Place Winner</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+
+                            {/* Contact CTA */}
+                            <section className="text-center card-hover p-8 bg-gray-50 rounded-2xl">
+                                <h2 className="text-2xl font-bold mb-4">Let's Connect</h2>
+                                <p className="text-gray-600 mb-6">Thank you for considering my application. I look forward to the opportunity to contribute to your team.</p>
+                                <div className="flex flex-wrap justify-center gap-4">
+                                    <a href="mailto:najeebullahn658@gmail.com" className="px-6 py-3 bg-black text-white rounded-sm font-medium text-sm mono hover:bg-gray-800 transition-all duration-300 hover-scale inline-flex items-center gap-2">
+                                        <i className="fas fa-envelope"></i>
+                                        Email Me
+                                    </a>
+                                    <a href="https://www.linkedin.com/in/najeebullah-n" target="_blank" className="px-6 py-3 border border-black text-black rounded-sm font-medium text-sm mono hover:bg-black hover:text-white transition-all duration-300 hover-scale inline-flex items-center gap-2">
+                                        <i className="fab fa-linkedin-in"></i>
+                                        LinkedIn
+                                    </a>
+                                    <a href="https://github.com/najeeb-08" target="_blank" className="px-6 py-3 border border-black text-black rounded-sm font-medium text-sm mono hover:bg-black hover:text-white transition-all duration-300 hover-scale inline-flex items-center gap-2">
+                                        <i className="fab fa-github"></i>
+                                        GitHub
+                                    </a>
+                                </div>
+                            </section>
+                        </div>
+                    </main>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<ResumeApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
