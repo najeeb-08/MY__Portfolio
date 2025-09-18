@@ -517,9 +517,14 @@
                     formData.append('timestamp', new Date().toISOString());
 
                     try {
-                        await fetch('https://script.google.com/macros/s/AKfycbx3_FGA-RzCFCruc0ADtsFiBfIuManm7k_Ro8NlNKBpoIDaiKBjwm6BJm60mU_eZ5gW/exec', {
-                            method: 'POST',
-                            body: formData,
+                        const params = new URLSearchParams();
+                        params.append('name', document.getElementById('name').value.trim());
+                        params.append('email', document.getElementById('email').value.trim());
+                        params.append('message', document.getElementById('message').value.trim());
+                        params.append('timestamp', new Date().toISOString());
+                        
+                        await fetch('https://script.google.com/macros/s/AKfycbx3_FGA-RzCFCruc0ADtsFiBfIuManm7k_Ro8NlNKBpoIDaiKBjwm6BJm60mU_eZ5gW/exec?' + params.toString(), {
+                            method: 'GET',
                             mode: 'no-cors'
                         });
                         alert('Message sent successfully!');
