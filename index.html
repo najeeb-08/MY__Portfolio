@@ -510,20 +510,30 @@
                     submitButton.textContent = 'Sending...';
                     submitButton.disabled = true;
 
-                    const formData = new FormData();
-                    formData.append('name', document.getElementById('name').value.trim());
-                    formData.append('email', document.getElementById('email').value.trim());
-                    formData.append('message', document.getElementById('message').value.trim());
-                    formData.append('timestamp', new Date().toISOString());
-
                     try {
                         const params = new URLSearchParams();
-                        params.append('name', document.getElementById('name').value.trim());
-                        params.append('email', document.getElementById('email').value.trim());
-                        params.append('message', document.getElementById('message').value.trim());
-                        params.append('timestamp', new Date().toISOString());
+                        const name = document.getElementById('name').value.trim();
+                        const email = document.getElementById('email').value.trim();
+                        const message = document.getElementById('message').value.trim();
+                        const timestamp = new Date().toISOString();
                         
-                        await fetch('https://script.google.com/macros/s/AKfycbxhclAz5SPCHgYxOxLo9AQF8nRf68jFEkRsBb2WHH_u29vv3GDhvWSiifIcI5p5HGYD/exec?' + params.toString(), {
+                        params.append('name', name);
+                        params.append('email', email);
+                        params.append('message', message);
+                        params.append('timestamp', timestamp);
+                        
+                        // Debug: log the data being sent
+                        console.log('Sending data:', {
+                            name: name,
+                            email: email,
+                            message: message,
+                            timestamp: timestamp
+                        });
+                        
+                        const url = 'https://script.google.com/macros/s/AKfycbxhclAz5SPCHgYxOxLo9AQF8nRf68jFEkRsBb2WHH_u29vv3GDhvWSiifIcI5p5HGYD/exec?' + params.toString();
+                        console.log('Full URL:', url);
+                        
+                        await fetch(url, {
                             method: 'GET',
                             mode: 'no-cors'
                         });
