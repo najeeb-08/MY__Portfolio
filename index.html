@@ -511,16 +511,10 @@
                     submitButton.disabled = true;
 
                     try {
-                        const params = new URLSearchParams();
                         const name = document.getElementById('name').value.trim();
                         const email = document.getElementById('email').value.trim();
                         const message = document.getElementById('message').value.trim();
                         const timestamp = new Date().toISOString();
-                        
-                        params.append('name', name);
-                        params.append('email', email);
-                        params.append('message', message);
-                        params.append('timestamp', timestamp);
                         
                         // Debug: log the data being sent
                         console.log('Sending data:', {
@@ -530,7 +524,10 @@
                             timestamp: timestamp
                         });
                         
-                        const url = 'https://script.google.com/macros/s/AKfycbxhclAz5SPCHgYxOxLo9AQF8nRf68jFEkRsBb2WHH_u29vv3GDhvWSiifIcI5p5HGYD/exec?' + params.toString();
+                        // Build URL with proper encoding
+                        const baseUrl = 'https://script.google.com/macros/s/AKfycbxhclAz5SPCHgYxOxLo9AQF8nRf68jFEkRsBb2WHH_u29vv3GDhvWSiifIcI5p5HGYD/exec';
+                        const url = `${baseUrl}?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&message=${encodeURIComponent(message)}&timestamp=${encodeURIComponent(timestamp)}`;
+                        
                         console.log('Full URL:', url);
                         
                         await fetch(url, {
